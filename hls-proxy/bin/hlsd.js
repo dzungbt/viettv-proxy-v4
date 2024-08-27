@@ -55,5 +55,19 @@ const middleware = require('../proxy')({
 if (middleware.connection)
   server.on('connection', middleware.connection)
 
-if (middleware.request)
-  server.on('request', middleware.request)
+if (middleware.request) {
+  // server.on('request', middleware.request)
+
+  server.on('request', (req, res) => {
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const pathname = url.pathname.toLowerCase();
+    
+    if (pathname.endsWith('.m3u8') || pathname.endsWith('.ts')) {
+      middleware.request(req, res);
+    } else {
+      // Xử lý các request khác ở đây
+      res.writeHead(404);
+      res.end('Not Found');
+    }
+  });
+}

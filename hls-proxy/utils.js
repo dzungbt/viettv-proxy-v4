@@ -1,5 +1,6 @@
 const expressjs = require('./expressjs_utils')
 const parse_url = require('./url').parse
+require("dotenv").config();
 
 const regexs = {
   req_url: new RegExp('^(.*?)/([a-zA-Z0-9\\+/=%]+)(?:[\\._]([^/\\?#]*))?(?:[\\?#].*)?$'),
@@ -39,6 +40,11 @@ const parse_req_url = function(params, req) {
     let url, url_lc, index
 
     url    = base64_decode( decodeURIComponent( matches[2] ) ).trim()
+    console.log('===> url : ', url)
+
+    url    = handle_request_of_cluster(url)
+    console.log('===> new url : ', url)
+
     url_lc = url.toLowerCase()
     index  = url_lc.indexOf('http')
 
@@ -202,6 +208,22 @@ const should_prefetch_url = function(params, url, url_type) {
     }
   }
   return do_prefetch
+}
+
+const handle_request_of_cluster = function (url) {
+  if (process.env.NODE_IS_ROOT || 
+    process.env.NODE_IS_ROOT == 1 || 
+    process.env.NODE_IS_ROOT == '1' ) {
+    return url
+  }
+
+  if (process.env.PARENT_URL == '') {
+    return url
+  }
+  const newDomain = process.env.PARENT_URL
+  const url = new URL(url);
+  const newUrl = `${newDomain}${url.pathname}${url.search}${url.hash}`;
+  return newUrl
 }
 
 module.exports = {

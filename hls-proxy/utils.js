@@ -40,10 +40,8 @@ const parse_req_url = function(params, req) {
     let url, url_lc, index
 
     url    = base64_decode( decodeURIComponent( matches[2] ) ).trim()
-    console.log('===> url : ', url)
 
     url    = handle_request_of_cluster(url)
-    console.log('===> new url : ', url)
 
     url_lc = url.toLowerCase()
     index  = url_lc.indexOf('http')
@@ -211,7 +209,7 @@ const should_prefetch_url = function(params, url, url_type) {
 }
 
 const handle_request_of_cluster = function (url) {
-  if (process.env.NODE_IS_ROOT || 
+  if (
     process.env.NODE_IS_ROOT == 1 || 
     process.env.NODE_IS_ROOT == '1' ) {
     return url
@@ -221,11 +219,22 @@ const handle_request_of_cluster = function (url) {
     return url
   }
   const newDomain = process.env.PARENT_URL
-  const url = new URL(url);
-  const newUrl = `${newDomain}${url.pathname}${url.search}${url.hash}`;
+  const urlObj = new URL(url);
+  // Lấy phần pathname
+  let pathname = urlObj.pathname;
+
+  // Nếu pathname kết thúc bằng '.ts', trả về '.ts'
+  let extension = ''
+  if (pathname.endsWith('.ts')) {
+    extension =  '.ts';
+  } else if (pathname.endsWith('.m3u8')) {
+    extension =  '.m3u8';
+  } else {
+    return url
+  }
+  const newUrl = `${newDomain}/${btoa(url)}${extension}`;
   return newUrl
 }
-
 module.exports = {
   base64_encode,
   base64_decode,

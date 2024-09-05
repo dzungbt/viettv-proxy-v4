@@ -64,6 +64,9 @@ if (middleware.request) {
     
     if (pathname.endsWith('.m3u8') || pathname.endsWith('.ts')) {
       middleware.request(req, res);
+    } else if (pathname == '/cdn/ping') {
+      res.writeHead(200, { 'Content-Type': 'text/plain' });
+      res.end('OK');
     } else {
       // Xử lý các request khác ở đây
       res.writeHead(404);

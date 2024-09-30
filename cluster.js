@@ -4,7 +4,7 @@ const os = require("os");
 const { dirname } = require("path");
 const { fileURLToPath } = require("url");
 
-const cpuCount = os.cpus().length - 2;
+const cpuCount = process.env.CLUSTER_PROCESS ?? 2;
 
 console.log(`The total number of CPUs is ${cpuCount}`);
 console.log(`Primary pid=${process.pid}`);

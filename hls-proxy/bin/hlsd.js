@@ -66,7 +66,7 @@ if (middleware.request) {
       middleware.request(req, res);
     } else if (pathname == '/cdn/ping') {
       res.writeHead(200, { 'Content-Type': 'text/plain' });
-      res.end('OK');
+      res.end('OK 3');
     } else {
       // Xử lý các request khác ở đây
       res.writeHead(404);

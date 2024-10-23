@@ -241,7 +241,7 @@ const handle_request_of_cluster = function (url) {
   } else {
     return url
   }
-  const newUrl = `${newDomain}/${btoa(url)}${extension}`;
+  const newUrl = `${newDomain}/${base64_encode(url)}${extension}`;
   return newUrl
 }
 module.exports = {

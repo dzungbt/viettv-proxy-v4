@@ -22,51 +22,56 @@ const base64_decode = function (str) {
 }
 
 const parse_req_url = function (params, req) {
-  const { is_secure, host, manifest_extension, segment_extension, hooks } = params
+  try {
+    const { is_secure, host, manifest_extension, segment_extension, hooks } = params
 
-  const result = { redirected_base_url: '', url_type: '', url: '', referer_url: '' }
-
-  const matches = regexs.req_url.exec(expressjs.get_proxy_req_url(req))
-
-  if (matches) {
-    result.redirected_base_url = `${(is_secure || (host && host.endsWith(':443'))) ? 'https' : 'http'}://${host || req.headers.host}${expressjs.get_base_req_url(req) || matches[1] || ''}`
-
-    if (matches[3]) {
-      result.url_type = matches[3].toLowerCase().trim()
-
-      if (manifest_extension && (result.url_type === manifest_extension))
-        result.url_type = 'm3u8'
-
-      if (segment_extension && (result.url_type === segment_extension))
-        result.url_type = 'ts'
-    }
-
-    let url, url_lc, index
-
-    url = base64_decode(decodeURIComponent(matches[2])).trim()
-
-    url = handle_request_of_cluster(url)
-
-    url_lc = url.toLowerCase()
-    index = url_lc.indexOf('http')
-
-    if (index === 0) {
-      index = url_lc.indexOf('|http')
-
-      if (index > 0) {
-        result.referer_url = url.substring(index + 1, url.length)
-
-        url = url.substring(0, index).trim()
+    const result = { redirected_base_url: '', url_type: '', url: '', referer_url: '' }
+  
+    const matches = regexs.req_url.exec(expressjs.get_proxy_req_url(req))
+  
+    if (matches) {
+      result.redirected_base_url = `${(is_secure || (host && host.endsWith(':443'))) ? 'https' : 'http'}://${host || req.headers.host}${expressjs.get_base_req_url(req) || matches[1] || ''}`
+  
+      if (matches[3]) {
+        result.url_type = matches[3].toLowerCase().trim()
+  
+        if (manifest_extension && (result.url_type === manifest_extension))
+          result.url_type = 'm3u8'
+  
+        if (segment_extension && (result.url_type === segment_extension))
+          result.url_type = 'ts'
       }
-
-      if (hooks && (hooks instanceof Object) && hooks.rewrite && (typeof hooks.rewrite === 'function'))
-        url = hooks.rewrite(url)
-
-      result.url = url
+  
+      let url, url_lc, index
+  
+      url = base64_decode(decodeURIComponent(matches[2])).trim()
+  
+      url = handle_request_of_cluster(url)
+  
+      url_lc = url.toLowerCase()
+      index = url_lc.indexOf('http')
+  
+      if (index === 0) {
+        index = url_lc.indexOf('|http')
+  
+        if (index > 0) {
+          result.referer_url = url.substring(index + 1, url.length)
+  
+          url = url.substring(0, index).trim()
+        }
+  
+        if (hooks && (hooks instanceof Object) && hooks.rewrite && (typeof hooks.rewrite === 'function'))
+          url = hooks.rewrite(url)
+  
+        result.url = url
+      }
     }
+  
+    return result
+  } catch (e) {
+    console.error('Error in parse_req_url : ', e)
+    return null
   }
-
-  return result
 }
 
 const get_content_type = function (data) {

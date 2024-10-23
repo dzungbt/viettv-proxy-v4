@@ -11,14 +11,24 @@ const regexs = {
 // btoa
 const base64_encode = function (str) {
   // return Buffer.from(str, 'binary').toString('base64')
-
-  return aesEcb.encrypt(process.env.TOKEN, str);
+  
+  try {
+     return aesEcb.encrypt(process.env.TOKEN, str);
+  } catch (e) {
+    console.log('base 64 encode error : ', str)
+     return Buffer.from(str, 'binary').toString('base64')
+  }
 }
 
 // atob
 const base64_decode = function (str) {
   // return Buffer.from(str, 'base64').toString('binary')
-  return aesEcb.decrypt( process.env.TOKEN, str);
+  try {
+    return aesEcb.decrypt( process.env.TOKEN, str);
+  } catch (e) {
+      console.log('base 64 decode error : ', str)
+      return Buffer.from(str, 'base64').toString('binary')
+  }
 }
 
 const parse_req_url = function (params, req) {
@@ -43,7 +53,6 @@ const parse_req_url = function (params, req) {
       }
   
       let url, url_lc, index
-  
       url = base64_decode(decodeURIComponent(matches[2])).trim()
   
       url = handle_request_of_cluster(url)

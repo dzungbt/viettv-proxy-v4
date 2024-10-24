@@ -26,7 +26,8 @@ const base64_decode = function (str) {
   const prefix = 'aHR0cDov';
 
   try {
-    if (str.startWith(prefix)) {
+      console.log('oke decode')
+    if (str.startsWith(prefix)) {
       console.log('OLD encrypted : ', str)
       return Buffer.from(str, 'base64').toString('binary')
     } else {
@@ -34,7 +35,7 @@ const base64_decode = function (str) {
       return aesEcb.decrypt( process.env.TOKEN, str);
     }
   } catch (e) {
-      console.log('base 64 decode error : ', str)
+      console.log('base 64 decode error : ', str, '--> e : ', e )
       return Buffer.from(str, 'base64').toString('binary')
   }
 }

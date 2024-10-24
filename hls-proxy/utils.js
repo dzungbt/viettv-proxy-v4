@@ -23,8 +23,16 @@ const base64_encode = function (str) {
 // atob
 const base64_decode = function (str) {
   // return Buffer.from(str, 'base64').toString('binary')
+  const prefix = 'aHR0cDov';
+
   try {
-    return aesEcb.decrypt( process.env.TOKEN, str);
+    if (str.startWith(prefix)) {
+      console.log('OLD encrypted : ', str)
+      return Buffer.from(str, 'base64').toString('binary')
+    } else {
+      console.log('NEW encrypted : ', str)
+      return aesEcb.decrypt( process.env.TOKEN, str);
+    }
   } catch (e) {
       console.log('base 64 decode error : ', str)
       return Buffer.from(str, 'base64').toString('binary')

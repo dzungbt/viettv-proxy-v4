@@ -13,7 +13,10 @@ const base64_encode = function (str) {
   // return Buffer.from(str, 'binary').toString('base64')
   
   try {
-     return aesEcb.encrypt(process.env.TOKEN, str);
+    //  return aesEcb.encrypt(process.env.TOKEN, str);
+    const encrypted = aesEcb.encrypt(process.env.TOKEN, str);
+    const hexEncoded = Buffer.from(encrypted, 'binary').toString('hex');
+    return hexEncoded;
   } catch (e) {
     console.log('base 64 encode error : ', str)
      return Buffer.from(str, 'binary').toString('base64')
@@ -24,14 +27,22 @@ const base64_encode = function (str) {
 const base64_decode = function (str) {
   // return Buffer.from(str, 'base64').toString('binary')
   const prefix = 'aHR0cDov';
+  const newDecodePrefix = '4wyQhbh';
 
   try {
     if (str.startsWith(prefix)) {
       console.log('OLD encrypted : ', str)
       return Buffer.from(decodeURIComponent(str), 'base64').toString('binary')
+    } else if (str.startsWith(newDecodePrefix)) {
+        console.log('NEW M3U8 encrypted : ', str)
+        return aesEcb.decrypt( process.env.TOKEN, str);
     } else {
       console.log('NEW encrypted : ', str)
-      return aesEcb.decrypt( process.env.TOKEN, str);
+    //   return aesEcb.decrypt( process.env.TOKEN, str);
+        const hex = Buffer.from(str, 'hex').toString('binary')
+        const decrypted = aesEcb.decrypt(process.env.TOKEN, hex);
+        console.log('---->response decrypted : ', decrypted)
+        return decrypted;
     }
   } catch (e) {
       console.log('base 64 decode error : ', str, '--> e : ', e )
@@ -46,7 +57,7 @@ const parse_req_url = function (params, req) {
     const result = { redirected_base_url: '', url_type: '', url: '', referer_url: '' }
   
     const matches = regexs.req_url.exec(expressjs.get_proxy_req_url(req))
-  
+    console.log('url: ', expressjs.get_proxy_req_url(req))
     if (matches) {
       result.redirected_base_url = `${(is_secure || (host && host.endsWith(':443'))) ? 'https' : 'http'}://${host || req.headers.host}${expressjs.get_base_req_url(req) || matches[1] || ''}`
   

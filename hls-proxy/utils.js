@@ -26,10 +26,9 @@ const base64_decode = function (str) {
   const prefix = 'aHR0cDov';
 
   try {
-      console.log('oke decode')
     if (str.startsWith(prefix)) {
       console.log('OLD encrypted : ', str)
-      return Buffer.from(str, 'base64').toString('binary')
+      return Buffer.from(decodeURIComponent(str), 'base64').toString('binary')
     } else {
       console.log('NEW encrypted : ', str)
       return aesEcb.decrypt( process.env.TOKEN, str);
@@ -62,7 +61,7 @@ const parse_req_url = function (params, req) {
       }
   
       let url, url_lc, index
-      url = base64_decode(decodeURIComponent(matches[2])).trim()
+      url = base64_decode(matches[2]).trim()
   
       url = handle_request_of_cluster(url)
   

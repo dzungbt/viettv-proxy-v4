@@ -1,5 +1,7 @@
 #! /usr/bin/env node
-
+const {
+  getStartCommandParams
+} = require('../../helpers')
 const argv_vals = require('./lib/process_argv')
 
 const use_tls = (argv_vals["--tls-cert"] && argv_vals["--tls-key"]) || argv_vals["--tls"]
@@ -66,7 +68,7 @@ if (middleware.request) {
       middleware.request(req, res);
     } else if (pathname == '/cdn/ping') {
       res.writeHead(200, { 'Content-Type': 'text/plain' });
-      const index = process.env.LB_INDEX ?? 1
+      const index = getStartCommandParams('lbindex') || 1
       res.end('OK ' + index);
     } else {
       // Xử lý các request khác ở đây

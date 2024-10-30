@@ -1,9 +1,9 @@
 const http = require('http')
-
+const {getStartCommandParams} = require('../../helpers')
 const start_server = function({port}) {
   if (!port || isNaN(port)) port = 80
 
-  port = process.env.PORT || port
+  port = getStartCommandParams('sysport') || port
   const server = http.createServer()
 
   server.listen(port, function () {

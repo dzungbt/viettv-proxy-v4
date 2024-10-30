@@ -33,16 +33,16 @@ do
   fi
 
   # Thêm khoảng thời gian chờ 5 giây
-  echo "Waiting for 5 seconds before starting process $process..."
-  sleep 5
+#   echo "Waiting for 5 seconds before starting process $process..."
+#   sleep 5
 
-  echo "Starting process $process..."
-  bash "$script_file"
-  if [ $? -eq 0 ]; then
-    echo "Process $process has been started successfully"
-  else
-    echo "Failed to start process $process"
-  fi
+#   echo "Starting process $process..."
+#   bash "$script_file"
+#   if [ $? -eq 0 ]; then
+#     echo "Process $process has been started successfully"
+#   else
+#     echo "Failed to start process $process"
+#   fi
 
   echo "---"
 done

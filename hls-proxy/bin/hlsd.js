@@ -70,7 +70,7 @@ if (middleware.request) {
       res.writeHead(200, { 'Content-Type': 'text/plain' });
       const index = getStartCommandParams('lbindex') || 1
       const region = getStartCommandParams('region') || 'sg'
-      res.end('Check proxy test  ' + index + ' region : ' + region);
+      res.end('PROXY ok : ' + index + ' region : ' + region);
     } else {
       // Xử lý các request khác ở đây
       res.writeHead(404);

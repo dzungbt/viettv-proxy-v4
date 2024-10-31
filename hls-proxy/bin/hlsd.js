@@ -69,7 +69,7 @@ if (middleware.request) {
     } else if (pathname == '/cdn/ping') {
       res.writeHead(200, { 'Content-Type': 'text/plain' });
       const index = getStartCommandParams('lbindex') || 1
-      res.end('OK ' + index);
+      res.end('Proxy running OK' + index);
     } else {
       // Xử lý các request khác ở đây
       res.writeHead(404);

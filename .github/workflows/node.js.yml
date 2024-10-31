@@ -57,7 +57,9 @@ jobs:
         #   ls -a
         #   echo 'Deploy sg done'
         #   exit
-
+    - run: npm ci
+    - run: npm i --init-module
+    
   build_de:
     runs-on: [self-hosted, proxy-v4-de]
     strategy:

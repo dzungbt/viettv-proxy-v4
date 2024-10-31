@@ -52,6 +52,7 @@ jobs:
         port: ${{ secrets.PROXY_V4_SG_PORT }}
         script: |
           bash ${{ secrets.PROXY_V4_SG_EXECUTE_PATH }}/.github/workflows/reexecute.sh
+          exit
 
 
   build_de:

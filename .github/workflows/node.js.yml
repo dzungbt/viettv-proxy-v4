@@ -50,7 +50,7 @@ jobs:
         password: ${{ secrets.PROXY_V4_SG_PW }}
         port: ${{ secrets.PROXY_V4_SG_PORT }}
         script: bash ${{ secrets.PROXY_V4_SG_EXECUTE_PATH }}/.github/workflows/reexecute.sh
-        command_timeout: 1m
+        command_timeout: 30s
         script_stop: true
 
   build_de:
@@ -95,7 +95,7 @@ jobs:
         username: ${{ secrets.PROXY_V4_DE_USERNAME }}
         password: ${{ secrets.PROXY_V4_DE_PW }}
         port: ${{ secrets.PROXY_V4_DE_PORT }}
-        command_timeout: 1m
+        command_timeout: 30s
         script: |
           bash ${{ secrets.PROXY_V4_DE_EXECUTE_PATH }}/.github/workflows/reexecute.sh
           echo 'Deploy de done'

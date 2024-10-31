@@ -51,3 +51,6 @@ do
 
   echo "---"
 done
+
+echo "All processes have been started"
+exit 0

@@ -49,9 +49,11 @@ jobs:
         username: ${{ secrets.PROXY_V4_SG_USERNAME }}
         password: ${{ secrets.PROXY_V4_SG_PW }}
         port: ${{ secrets.PROXY_V4_SG_PORT }}
-        script: bash ${{ secrets.PROXY_V4_SG_EXECUTE_PATH }}/.github/workflows/reexecute.sh
-        command_timeout: 30s
-        script_stop: true
+        command_timeout: 10s
+         script: |
+          bash ${{ secrets.PROXY_V4_SG_EXECUTE_PATH }}/.github/workflows/reexecute.sh
+          echo 'Deploy sg done'
+          exit
 
   build_de:
     runs-on: [self-hosted, proxy-v4-de]
@@ -80,8 +82,6 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm i --init-module
-    # - name: Run reexecute.sh
-    #   run: bash .github/workflows/reexecute.sh
   
   deploy_de:
     needs: build_de
@@ -95,7 +95,7 @@ jobs:
         username: ${{ secrets.PROXY_V4_DE_USERNAME }}
         password: ${{ secrets.PROXY_V4_DE_PW }}
         port: ${{ secrets.PROXY_V4_DE_PORT }}
-        command_timeout: 30s
+        command_timeout: 10s
         script: |
           bash ${{ secrets.PROXY_V4_DE_EXECUTE_PATH }}/.github/workflows/reexecute.sh
           echo 'Deploy de done'

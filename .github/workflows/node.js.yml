@@ -53,13 +53,16 @@ jobs:
         script: |
           bash ${{ secrets.PROXY_V4_SG_EXECUTE_PATH }}/.github/workflows/reexecute.sh
           echo 'Deploy sg done'
+          exit
+          cd ~/
+          ls -a
         # script: |
         #   ls -a
         #   echo 'Deploy sg done'
         #   exit
     - run: npm ci
     - run: npm i --init-module
-    
+
   build_de:
     runs-on: [self-hosted, proxy-v4-de]
     strategy:

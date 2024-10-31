@@ -41,6 +41,8 @@ jobs:
     needs: build_sg
     runs-on: [self-hosted, proxy-v4-sg]
     steps:
+    - run: npm ci
+    - run: npm i --init-module
     - name: Deploy to server
       uses: appleboy/ssh-action@v1.1.0
       with:
@@ -61,8 +63,6 @@ jobs:
         #   ls -a
         #   echo 'Deploy sg done'
         #   exit
-    - run: npm ci
-    - run: npm i --init-module
 
   build_de:
     runs-on: [self-hosted, proxy-v4-de]

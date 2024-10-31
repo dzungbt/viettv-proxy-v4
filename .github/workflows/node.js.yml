@@ -36,8 +36,23 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm i --init-module
-    - name: Run reexecute.sh
-      run: bash .github/workflows/reexecute.sh
+    # - name: Run reexecute.sh
+    #   run: bash .github/workflows/reexecute.sh
+  
+  deploy_sg:
+    needs: build_sg
+    runs-on: [self-hosted, proxy-v4-sg]
+    steps:
+    - name: Deploy to server
+      uses: appleboy/ssh-action@v0.1.3
+      with:
+        host: ${{ secrets.PROXY_V4_SG_HOST }}
+        username: ${{ secrets.PROXY_V4_SG_USERNAME }}
+        password: ${{ secrets.PROXY_V4_SG_PW }}
+        port: ${{ secrets.PROXY_V4_SG_PORT }}
+        script: |
+          bash ${{ secrets.PROXY_V4_SG_EXECUTE_PATH }}/.github/workflows/reexecute.sh
+
 
   build_de:
     runs-on: [self-hosted, proxy-v4-de]

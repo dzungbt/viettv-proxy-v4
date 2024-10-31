@@ -48,7 +48,7 @@ jobs:
         username: ${{ secrets.PROXY_V4_SG_USERNAME }}
         password: ${{ secrets.PROXY_V4_SG_PW }}
         port: ${{ secrets.PROXY_V4_SG_PORT }}
-        script-file: ${{ secrets.PROXY_V4_SG_EXECUTE_PATH }}/.github/workflows/reexecute.sh
+        script: ${{ secrets.PROXY_V4_SG_EXECUTE_PATH }}/.github/workflows/reexecute.sh
         # script: |
         #   bash ${{ secrets.PROXY_V4_SG_EXECUTE_PATH }}/.github/workflows/reexecute.sh
         #   echo 'Deploy sg done'

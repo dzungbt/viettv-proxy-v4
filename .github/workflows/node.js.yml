@@ -40,7 +40,15 @@ jobs:
   deploy_sg:
     needs: build_sg
     runs-on: [self-hosted, proxy-v4-sg]
+    strategy:
+      matrix:
+        node-version: [20.x]
     steps:
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
     - run: npm ci
     - run: npm i --init-module
     - name: Deploy to server
